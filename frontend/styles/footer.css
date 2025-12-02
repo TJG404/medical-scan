@@ -1,0 +1,41 @@
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #222;
+    color: white;
+    padding: 20px;
+    font-size: 14px;
+}
+
+.footer-list {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.footer-section {
+    width: 30%;
+    text-align: left;
+}
+
+.footer-section h3 {
+    border-bottom: 2px solid white;
+    padding-bottom: 7px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin: 10px 0;
+}
+
+.footer-section ul li a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin: 7px 0;
+}

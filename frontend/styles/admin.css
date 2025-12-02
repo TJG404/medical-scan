@@ -1,0 +1,278 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.error-msg {
+    display: none;
+    color: red;
+    font-size: 12px;
+}
+
+.tabs {
+    width: 940px;
+    margin: 40px auto 0 auto;
+    display: flex;
+    cursor: pointer;
+}
+
+.tab, #none {
+    padding: 15px 20px;
+    color: white;
+    font-size: 16px;
+    background-color: #777;
+    transition: background-color 0.3s;
+}
+
+#none {
+    border-radius: 10px 0 0 0;
+}
+
+.member-section {
+    margin-bottom: 10px;
+}
+
+#tab-4 {
+    margin-right: 0;
+    border-radius: 0 10px 0 0;
+}
+
+.tab:hover {
+    background-color: #666;
+}
+
+.tab.active {
+    background-color: #555;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.tab-content.active {
+    display: block;
+    margin: auto auto 40px auto;
+    border-radius: 0 10px 10px 10px;
+    background-color: #333;
+}
+
+.tab-content.active p {
+    color: white;
+}
+
+.showDropdown {
+    display: grid;
+    grid-template-columns: 80px 180px 220px 1fr;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #ddd;
+    font-size: 16px;
+    text-align: left;
+}
+
+.dropdown-menu {
+    display: none;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+#first-tab {
+    display: flex;
+    flex-direction: column;
+}
+
+#dropdown-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#dropdown-container label {
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#dropdown-container select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+#dropdown-container select:focus {
+    border-color: #0056b3;
+    background-color: #e9f3ff;
+    outline: none;
+}
+
+#dropdown-container select:hover {
+    background-color: #f1f1f1;
+}
+
+#account {
+    font-weight: bold;
+    color: #007bff;
+    margin-left: 100px;
+}
+
+#tab1, #tab2, #tab3, #tab4 {
+    width: 900px;
+}
+
+#second-tab {
+    display: flex;
+    gap: 10px;
+}
+
+#third-tab {
+    display: flex;
+    gap: 10px;
+}
+
+#second-tab label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#third-tab label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#second-tab input {
+    margin-bottom: 0;
+}
+
+#third-tab input {
+    margin-bottom: 0;
+}
+
+#second-tab button {
+    margin-left: 70px;
+}
+
+#third-tab button {
+    margin-left: 70px;
+}
+
+.dropdown-menu label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.dropdown-menu input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.dropdown-menu input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+.dropdown-menu button {
+    padding: 10px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out;
+}
+
+.dropdown-menu button:hover {
+    background-color: #5a6268;
+}
+
+.member-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.member-table th, .member-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.dropdown-menu {
+    display: none;
+}
+
+.showDropdown.active + .dropdown-menu {
+    display: table-row;
+}
+
+.log-list {
+    display: flex;
+    list-style: none;
+    background-color: black;
+    border-radius:10px;
+    padding: 10px;
+}
+
+.log-list li {
+    margin-right: auto;
+    color: white;
+}
+
+.log-content {
+    display: flex;
+    list-style: none;
+    background-color: #ddd;
+    padding: 10px;
+}
+
+.log-content li {
+    color: black;
+}
+
+.log-content li:nth-child(1) {
+    flex: 0 0 175px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.log-content li:nth-child(2) {
+    flex: 0 0 165px;
+    margin-right: 10px;
+}
+
+.log-content li:nth-child(3) {
+    flex: 0 0 165px;
+    margin-right: 10px;
+}
+
+.log-content li:nth-child(4) {
+    flex: 0 0 140px;
+    margin-right: 10px;
+}
+
+.log-content li:nth-child(5) {
+    flex: 0 0 300px;
+}

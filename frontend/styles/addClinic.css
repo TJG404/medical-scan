@@ -1,0 +1,86 @@
+/* 전체 페이지 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0a0a0a;
+    color : #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+/* 컨텐츠 전체 감싸는 컨테이너 */
+#content-container {
+    width: 70%;
+    margin: 50px auto;
+    padding: 30px;
+    text-align: center;
+    border-radius: 12px;
+    background: #222;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* 환자 코드 제목 */
+#patient-code {
+    font-size: 24px !important;
+    font-weight: bold !important;
+    margin-bottom: 20px !important;
+    color: #E0E0E0;
+}
+
+/* 입력 그룹 스타일 */
+.input-group {
+    display: flex;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* 진료 내용 입력 부분은 따로 정렬 */
+.input-group.textarea-group {
+    align-items: flex-start; /* 상단 정렬 */
+}
+
+/* 라벨 스타일 */
+label {
+    width: 160px; /* 모든 라벨의 너비를 통일 */
+    font-weight: bold;
+    color: #ffffff;
+    text-align: right;
+}
+
+/* 입력 필드 스타일 */
+#userCode, #clinicDate, textarea {
+    width: calc(100% - 170px); /* 전체 컨테이너에서 라벨 부분을 제외한 크기 */
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #333333;
+    transition: border 0.3s ease;
+    margin-left: auto; /* 라벨 오른쪽에 정렬 */
+    color: #ffffff;
+}
+
+
+/* textarea 높이 조정 */
+textarea {
+    height: 120px; /* 적절한 높이 설정 */
+    resize: none; /* 크기 조정 비활성화 */
+}
+
+/* 버튼 스타일 */
+button {
+    width: 150px;
+    padding: 12px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: bold;
+    background: #2973B2;
+}
+
+button:hover {
+    background: #063c6a;
+}
