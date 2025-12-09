@@ -1,0 +1,74 @@
+"use client";
+
+import React, {useState, useRef} from "react";
+import {postLogin} from "@/utils/usersAPI.js";
+
+export default function Login() {
+    const idRef = useRef(null);
+    const pwdRef = useRef(null);
+    const [formData, setFormData] = useState({id:'', pwd:''});
+    const [errors, setErrors] = useState({id:'', pwd:''});
+
+    /** 입력 폼 데이터 변경 이벤트 처리 **/
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({...formData, [name]:value.trim()});
+        setErrors({...errors, [name]:''});
+    }
+
+    /** 로그인 버튼 이벤트 처리 **/
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+
+        if(idRef.current.value == ""){
+            setErrors({...errors, id:"아이디를 입력해주세요"});
+        } else if(pwdRef.current.value == ""){
+            setErrors({...errors, pwd:"패스워드를 입력해주세요"});
+        } else {
+            const response = await postLogin(formData);
+            const {result} = await response.json();
+            if(result) {
+                alert("로그인에 성공하셨습니다.");
+            } else {
+                alert("아이디 또는 패스워드가 정확하지 않습니다.\n확인후 다시 시도해주세요.");
+                setFormData({id:'', pwd:''});
+                idRef.current.value = "";
+                pwdRef.current.value = "";
+                idRef.current.focus();
+            }
+        }
+   }
+
+    return (
+        <form className="form-box" onSubmit={handleLoginSubmit}>
+            <h1 className="form-title">Login</h1>
+            <div className="input-group">
+                <label id="label-email" htmlFor="email">ID : </label>
+                <input  className="input-box"
+                        style={{width:"85%", textIndent:"6px"}}
+                        type="text"
+                        id="id"
+                        name="id"
+                        ref={idRef}
+                        value={formData.id}
+                        onChange={handleFormChange}
+                />
+            </div>
+            <p className="error-msg" >{errors.id}</p>
+            <div className="input-group">
+                <label id="label-password" htmlFor="pwd">PW :</label>
+                <input  className="input-box"
+                        style={{width:"82%"}}
+                        type="password"
+                        name="pwd"
+                        id="password"
+                        ref={pwdRef}
+                        value={formData.password}
+                        onChange={handleFormChange}
+                />
+            </div>
+            <p className="error-msg" >{errors.pwd}</p>
+            <button type="submit">Sign In</button>
+        </form>
+    )
+}

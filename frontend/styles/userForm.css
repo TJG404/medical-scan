@@ -1,3 +1,6 @@
+.form-container {
+    min-height: 69.7vh;
+}
 .form-box {
     width: 350px;
     padding: 20px;
@@ -16,7 +19,7 @@
 }
 
 .input-box {
-    font-size: 14px !important; /* 글자 크기 강제 적용 */
+    font-size: 14px;  /* 글자 크기 강제 적용 */
     color: black;
     font-family: Arial, sans-serif;
     text-align: left;
@@ -31,7 +34,7 @@
 
 .input-group {
     position: relative;
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
 }
 
 .input-group label {
@@ -99,9 +102,10 @@
 }
 
 .error-msg {
-    display: none;
-    color: #ff4d4d;
-    font-size: 12px;
+    /*display: none;*/
+    color: yellow;
+    font-size: 10px;
+    margin: 3px 0 15px 0;
 }
 
 button {
