@@ -2,14 +2,23 @@
 import Link from "next/link";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import {useAuthStore} from "@/store/authStore.js";
+import {postLogout} from "@/utils/usersAPI.js";
 
 export default function Header() {
     const router = useRouter();
-    const [isLogin, setIsLogin] = useState(false);
-
+    const isLogin = useAuthStore(s => s.isLogin);
+    const logout = useAuthStore(s => s.logout);
     const handleLogin = () => { router.push("/login"); };
     const handleSignup = () => { router.push("/signup"); };
-    const handleLogout= () => {}
+
+    const handleLogout= async() => {
+        const response = await postLogout();
+        if(response.ok){
+            logout();
+            router.push("/");
+        }
+    }
     const handleMypage = () => {}
 
     return (
@@ -21,23 +30,19 @@ export default function Header() {
                 </h1>
             </div>
 
-            {/*<c:if test="${empty admin && empty authUser }">*/}
             {!isLogin &&
                 <div className="btn">
                     <input type="button" value="로그인" onClick={handleLogin}/>
                     <input type="button" value="회원가입" onClick={handleSignup}/>
                 </div>
             }
-            {/*</c:if>*/}
 
-            {/*<c:if test="${not empty authUser }">*/}
             {isLogin &&
                 <div className="btn">
-                    <input type="button" value="회원정보" onClick={handleMypage}/>
+                    <input type="button" value="회원정보" onClick={()=>{ router.push("/admin/members"); }}/>
                     <input type="button" id="btn-logout" value="로그아웃" onClick={handleLogout}/>
                 </div>
             }
-            {/*</c:if>*/}
         </header>
 
         {isLogin &&

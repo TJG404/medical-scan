@@ -1,18 +1,21 @@
 
 export const postLogin = async(formData) => {
-   const response = await fetch("/api/users/login",
-                                   {
-                                       method: "POST",
-                                       headers: { "Content-Type": "application/json" },
-                                       body: JSON.stringify(formData),
-                                   });
+   const response = await fetch("/api/auth/login", {
+               method: "POST",
+               headers: { "Content-Type": "application/json" },
+               body: JSON.stringify(formData),
+           });
+    return response;
+}
+
+export const postLogout = async() => {
+    const response = await fetch("/api/auth/logout", {method: "GET" });
     return response;
 }
 
 
 export const postSignup = async(formData) => {
-    const response = await fetch("/api/users/signup",
-        {
+    const response = await fetch("/api/users/signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
@@ -22,8 +25,7 @@ export const postSignup = async(formData) => {
 
 export const postIdVerify = async(id) => {
     console.log("id ::", id);
-    const response = await fetch("/api/users/check-id",
-        {
+    const response = await fetch("/api/users/check-id",{
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(id),

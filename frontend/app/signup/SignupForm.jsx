@@ -89,7 +89,7 @@ export default function Signup() {
                 </div>
             </div>
             {form.id ? (checkFlag ? <p className="error-msg" style={{color:"yellowgreen"}}>{msg}</p>
-                        : <p className="error-msg" >{msg}</p>) : <p className="error-msg">{errors.id}</p>
+                        : <p className="error-msg" style={{color:"coral"}}>{msg}</p>) : <p className="error-msg">{errors.id}</p>
             }
 
             <div className="input-group">

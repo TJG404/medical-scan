@@ -1,10 +1,7 @@
-// app/api/users/route.js
 import { NextResponse } from 'next/server';
 import { getDB } from '@/lib/db.js';
 
-// mysql2는 Edge Runtime에서 안 돌아가므로 Node.js 런타임 명시
 export const runtime = 'nodejs';
-
 
 export async function POST(request) {
     try {
@@ -17,7 +14,9 @@ export async function POST(request) {
             `,
             [id, pwd, hospital, department, name, email, phone]
         );
-console.log(result);
+
+        await db.end(); //DB 연결 종료
+
         return NextResponse.json({ok: true});
     }catch(error) {
         console.log(error);

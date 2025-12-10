@@ -1,22 +1,14 @@
-// import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/header.css";
 import "@/styles/footer.css";
 import "@/styles/reset.css";
 import "@/styles/main.css";
 import "@/styles/userForm.css";
 
-import Header from "@/components/commons/Header.jsx";
-import Footer from "@/components/commons/Footer";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-//
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
+import AppShell from "@/app/AppShell.js";
+// import Header from "@/components/commons/Header.jsx";
+// import Footer from "@/components/commons/Footer.jsx";
+// import {AuthHydrator} from "@/app/provider/AuthHydrator.jsx";
 
 export const metadata = {
   title: "Create Next App",
@@ -27,9 +19,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="layout-container">
-        <Header />
-        {children}
-        <Footer />
+        <AppShell >{children}</AppShell>
+        {/*<AuthHydrator />*/}
+        {/*<Header />*/}
+        {/*{children}*/}
+        {/*<Footer />*/}
       </body>
     </html>
   );

@@ -2,12 +2,16 @@
 
 import React, {useState, useRef} from "react";
 import {postLogin} from "@/utils/usersAPI.js";
+import {useAuthStore} from "@/store/authStore.js";
+import {useRouter} from "next/navigation";
 
 export default function Login() {
+    const router = useRouter();
     const idRef = useRef(null);
     const pwdRef = useRef(null);
     const [formData, setFormData] = useState({id:'', pwd:''});
     const [errors, setErrors] = useState({id:'', pwd:''});
+    const login = useAuthStore((s) => s.login);
 
     /** 입력 폼 데이터 변경 이벤트 처리 **/
     const handleFormChange = (e) => {
@@ -26,9 +30,15 @@ export default function Login() {
             setErrors({...errors, pwd:"패스워드를 입력해주세요"});
         } else {
             const response = await postLogin(formData);
-            const {result} = await response.json();
-            if(result) {
+            const {data} = await response.json();
+
+            if(data.count) {
                 alert("로그인에 성공하셨습니다.");
+                login({
+                    userId: data.id,
+                    role: data.role,
+                    });
+                router.push("/");
             } else {
                 alert("아이디 또는 패스워드가 정확하지 않습니다.\n확인후 다시 시도해주세요.");
                 setFormData({id:'', pwd:''});
