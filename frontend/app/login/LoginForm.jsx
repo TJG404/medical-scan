@@ -30,17 +30,17 @@ export default function Login() {
             setErrors({...errors, pwd:"패스워드를 입력해주세요"});
         } else {
             const response = await postLogin(formData);
-            const {data} = await response.json();
+            const { data, message } = await response.json();
 
-            if(data.count) {
-                alert("로그인에 성공하셨습니다.");
+            if(data.count && response.status === 200) {
+                alert(message);
                 login({
                     userId: data.id,
                     role: data.role,
                     });
                 router.push("/");
             } else {
-                alert("아이디 또는 패스워드가 정확하지 않습니다.\n확인후 다시 시도해주세요.");
+                alert(message);
                 setFormData({id:'', pwd:''});
                 idRef.current.value = "";
                 pwdRef.current.value = "";

@@ -3,12 +3,7 @@ import "@/styles/footer.css";
 import "@/styles/reset.css";
 import "@/styles/main.css";
 import "@/styles/userForm.css";
-
-
 import AppShell from "@/app/AppShell.js";
-// import Header from "@/components/commons/Header.jsx";
-// import Footer from "@/components/commons/Footer.jsx";
-// import {AuthHydrator} from "@/app/provider/AuthHydrator.jsx";
 
 export const metadata = {
   title: "Create Next App",
@@ -20,10 +15,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="layout-container">
         <AppShell >{children}</AppShell>
-        {/*<AuthHydrator />*/}
-        {/*<Header />*/}
-        {/*{children}*/}
-        {/*<Footer />*/}
       </body>
     </html>
   );

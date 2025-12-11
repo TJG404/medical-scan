@@ -14,7 +14,7 @@ export async function POST(request) {
             `select count(*) as count from users where id = ?`,
             [id]
         );
-        await db.end();
+        // await db.end();  //DB pool 연결 종료 - 회원가입 중 아이디체크하고 DB 연결이 종료됨!
         const count = rows[0].count;
         const result = count > 0;
 

@@ -3,8 +3,7 @@
 import "@/styles/admin.css";
 
 import {useEffect, useState} from "react";
-import {postMembers} from "@/utils/adminAPI.js";
-import {postIdVerify} from "@/utils/usersAPI";
+import {postMembers, putMembers} from "@/utils/adminAPI.js";
 
 export default function MembersPage() {
     const [members, setMembers] = useState([]);
@@ -21,6 +20,29 @@ export default function MembersPage() {
 
     const handleToggle = ({index}) => {
         setOpenIndex((prev) => (prev === index ? null : index));
+    }
+
+    const handleFormChange = (id, e) => {
+        const { name, value } = e.target;
+        setMembers(prev =>
+            prev.map(item =>
+                item.id === id
+                    ? { ...item, [name]: value }
+                    : item
+            )
+        );
+    }
+
+    const handleMemersUpdateSubmit = async(e, index) => {
+        e.preventDefault();
+
+        const member = members.find((member, idx) => idx === index );
+        const response = await putMembers(member);
+        const { result } = await response.json();
+        if(result) {
+            alert("수정이 완료되었습니다.");
+        }
+
     }
 
     return (
@@ -53,15 +75,15 @@ export default function MembersPage() {
                          style={{
                              display: (openIndex === index) ? "block" : "none",
                          }}>
-                        <form data-id={index} id="first-tab">
+                        <form data-id={index} id="first-tab" onSubmit={(e) => handleMemersUpdateSubmit(e, index)}>
                             <input type="hidden" id={`userCode-tab1-${index}`} name="userCode"
                                    value={member.id}/>
 
-                            <label htmlFor={`username-tab1-${index}`}>ID:</label>
+                            <label htmlFor={`username-tab1-${index}`}>ID: </label>
                             <input type="text"
                                    id={`username-tab1-${index}`}
                                    name="username"
-                                   value={member.name}
+                                   value={member.id}
                                    readOnly      />
                             <p className="error-msg" id={`error-message-username-${index}`}>아이디가 중복됩니다.</p>
 
@@ -70,43 +92,31 @@ export default function MembersPage() {
                                    id={`email-tab1-${index}`}
                                    name="email"
                                    value={member.email}
-                                    readOnly    />
+                                   onChange={(e)=> {handleFormChange(member.id, e)}}
+                                   />
                             <p className="error-msg" id={`error-message-email-${index}`}>이메일이 중복됩니다.</p>
 
                             <div id="dropdown-container">
                                 <label htmlFor={`status-tab1-${index}`}>Status:</label>
                                 <label>
-                                    <select id={`status-tab1-${index}`} name="status">
-                                        <option value="active">active
-                                        </option>
-                                        <option value="pending" >pending
-                                        </option>
-                                        <option value="suspended"
-                                               >suspended
-                                        </option>
+                                    <select id={`status-tab1-${index}`}
+                                            name="status"
+                                            defaultValue={member.status}
+                                            onChange={(e)=> {handleFormChange(member.id, e)}}>
+                                            <option value="active">active</option>
+                                            <option value="pending">pending</option>
+                                            <option value="suspended">suspended</option>
                                     </select>
                                 </label>
                                 <label id="account" htmlFor={`accountType-tab1-${index}`}>Account Type:</label>
                                 <label>
-                                    <select id={`accountType-tab1-${index}`} name="accountType">
-                                        {members && members.role === 'admin' ?
-                                            <option value="admin" selected>admin</option>
-                                            : <option value="admin">admin</option>
-                                        }
-                                        {members && members.role === 'user' ?
-                                            <option value="user" selected>user</option>
-                                            : <option value="user">user</option>
-                                        }
-                                        {members && members.role === 'temporary' ?
-                                            <option value="temporary" selected>temporary</option>
-                                            : <option value="temporary">temporary</option>
-                                        }
-
-                                        {/*<option value="user" ${user.accountType == 'user' ? 'selected' : ''}>user*/}
-                                        {/*</option>*/}
-                                        {/*<option value="temporary"*/}
-                                        {/*        ${user.accountType == 'temporary' ? 'selected' : ''}>temporary*/}
-                                        {/*</option>*/}
+                                    <select id={`accountType-tab1-${index}`}
+                                            name="role"
+                                            defaultValue={member.role}
+                                            onChange={(e)=> {handleFormChange(member.id, e)}}>
+                                            <option value="admin">admin</option>
+                                            <option value="user">user</option>
+                                            <option value="temporary">temporary</option>
                                     </select>
                                 </label>
                             </div>

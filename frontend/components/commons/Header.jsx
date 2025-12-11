@@ -9,6 +9,7 @@ export default function Header() {
     const router = useRouter();
     const isLogin = useAuthStore(s => s.isLogin);
     const logout = useAuthStore(s => s.logout);
+    const role = useAuthStore(s => s.role);
     const handleLogin = () => { router.push("/login"); };
     const handleSignup = () => { router.push("/signup"); };
 
@@ -39,7 +40,9 @@ export default function Header() {
 
             {isLogin &&
                 <div className="btn">
-                    <input type="button" value="회원정보" onClick={()=>{ router.push("/admin/members"); }}/>
+                    {role === 'admin' &&
+                        <input type="button" value="회원정보" onClick={()=>{ router.push("/admin/members"); }}/>
+                    }
                     <input type="button" id="btn-logout" value="로그아웃" onClick={handleLogout}/>
                 </div>
             }

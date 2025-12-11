@@ -15,7 +15,7 @@ export async function POST(request) {
             [id, pwd, hospital, department, name, email, phone]
         );
 
-        await db.end(); //DB 연결 종료
+        // await db.end(); //DB 연결 종료
 
         return NextResponse.json({ok: true});
     }catch(error) {
