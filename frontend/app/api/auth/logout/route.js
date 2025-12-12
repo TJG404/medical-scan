@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifyAccessToken } from "@/lib/jwt.js";
 
-export async function GET() {
+export async function POST() {
     try {
         const response = NextResponse.json({ message: "logout success" }, { status: 200 });
 

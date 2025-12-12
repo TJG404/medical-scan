@@ -1,0 +1,98 @@
+/* === scope: 이 영역에서만 적용 === */
+/* 노란 보더 컨테이너 */
+.patients-pagination {
+    display: inline-block;
+    /*border: 2px solid #ffd400;*/
+    padding: 6px 10px;
+}
+
+/* rc-pagination 루트 */
+.patients-pagination .rc-pagination {
+    width: 100%;
+    /*border: 1px solid yellow;*/
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    /*margin: 0;*/
+    list-style: none;
+    user-select: none;
+}
+
+/* 공통 버튼(페이지/이전/다음/점프) */
+.patients-pagination .rc-pagination-item,
+.patients-pagination .rc-pagination-prev,
+.patients-pagination .rc-pagination-next,
+.patients-pagination .rc-pagination-jump-prev,
+.patients-pagination .rc-pagination-jump-next {
+    min-width: 40px;
+    height: 36px;
+    line-height: 34px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.55) inset;
+    transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+
+/* 링크/버튼 텍스트 */
+.patients-pagination .rc-pagination-item a,
+.patients-pagination .rc-pagination-prev a,
+.patients-pagination .rc-pagination-next a,
+.patients-pagination .rc-pagination-jump-prev a,
+.patients-pagination .rc-pagination-jump-next a {
+    display: block;
+    text-align: center;
+    color: rgba(255,255,255,0.88);
+    text-decoration: none;         /* bootstrap 영향 차단 */
+    outline: none;
+}
+
+/* hover */
+.patients-pagination .rc-pagination-item:hover,
+.patients-pagination .rc-pagination-prev:hover,
+.patients-pagination .rc-pagination-next:hover {
+    border-color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.10);
+    transform: translateY(-1px);
+}
+
+/* active(현재 페이지) */
+.patients-pagination .rc-pagination-item-active {
+    border-color: rgba(0, 190, 255, 0.9);
+    background: rgba(0, 190, 255, 0.18);
+    box-shadow:
+            0 0 0 1px rgba(0, 190, 255, 0.35) inset,
+            0 6px 18px rgba(0, 190, 255, 0.10);
+}
+
+.patients-pagination .rc-pagination-item-active a {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* disabled(이전/다음 비활성) */
+.patients-pagination .rc-pagination-disabled,
+.patients-pagination .rc-pagination-disabled:hover {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 빠른 점프(... 표시) */
+.patients-pagination .rc-pagination-jump-prev a,
+.patients-pagination .rc-pagination-jump-next a {
+    color: rgba(255,255,255,0.65);
+}
+
+/* 옵션: total/size changer 등 쓰는 경우 */
+.patients-pagination .rc-pagination-total-text {
+    color: rgba(255,255,255,0.65);
+    margin-right: 8px;
+}
+.patients-pagination ul,
+.patients-pagination li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}

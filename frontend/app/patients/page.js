@@ -1,8 +1,10 @@
+import Patients from "@/app/patients/Patients.jsx";
 
-export default function patients() {
+export default function PatientsList() {
     return (
         <div>
-            환자 목록
+            <Patients />
         </div>
-    )
+    );
+
 }

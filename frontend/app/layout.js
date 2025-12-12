@@ -3,6 +3,10 @@ import "@/styles/footer.css";
 import "@/styles/reset.css";
 import "@/styles/main.css";
 import "@/styles/userForm.css";
+import "@/styles/patient.css";
+import "@/styles/pagination.css";
+
+
 import AppShell from "@/app/AppShell.js";
 
 export const metadata = {

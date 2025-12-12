@@ -10,6 +10,7 @@ export default function Header() {
     const isLogin = useAuthStore(s => s.isLogin);
     const logout = useAuthStore(s => s.logout);
     const role = useAuthStore(s => s.role);
+    const status = useAuthStore(s => s.status);
     const handleLogin = () => { router.push("/login"); };
     const handleSignup = () => { router.push("/signup"); };
 
@@ -52,7 +53,7 @@ export default function Header() {
             <nav id="menu">
                 <ul>
                     <li><Link href="/patientScan/list">의료 영상 목록</Link></li>
-                    <li><Link href="/patients/">환자 목록</Link></li>
+                    <li><Link href="/patients">환자 목록</Link></li>
                 </ul>
             </nav>
         }

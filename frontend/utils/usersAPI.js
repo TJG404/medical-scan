@@ -9,7 +9,7 @@ export const postLogin = async(formData) => {
 }
 
 export const postLogout = async() => {
-    const response = await fetch("/api/auth/logout", {method: "GET" });
+    const response = await fetch("/api/auth/logout", {method: "POST" });
     return response;
 }
 
