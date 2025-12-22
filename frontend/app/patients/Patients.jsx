@@ -13,7 +13,6 @@ export default function Patients() {
     const [totalCount, setTotalCount] = useState(0);
     const [pageSize, setPageSize] = useState(10);
 
-
     useEffect(() => {
         const fetchData = async () => {
             const response = await getPatients({currentPage, pageSize});
@@ -23,7 +22,7 @@ export default function Patients() {
             setTotalCount(data.totalElements);
         }
         fetchData();
-    }, [])
+    }, [currentPage, pageSize]);
 
     return (
         <div id="patient-content-container">
@@ -31,10 +30,10 @@ export default function Patients() {
             <table className="patient-table">
                 <thead>
                 <tr>
-                    <th>환자 ID</th>
-                    <th>이름</th>
-                    <th>성별</th>
-                    <th>생년월일</th>
+                    <th style={{ width: "10%" }}>환자 ID</th>
+                    <th style={{ width: "15%" }}>이름</th>
+                    <th style={{ width: "5%" }}>성별</th>
+                    <th style={{ width: "10%" }}>생년월일</th>
                     <th>진료기록</th>
                     {/* 진료 보기 버튼 클릭 */}
                     <th>판독기록</th>
@@ -61,7 +60,7 @@ export default function Patients() {
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colSpan={6} className=>
+                    <td colSpan={6}>
                         <div className="patients-pagination">
                             <Pagination
                                 // className="d-flex justify-content-center"

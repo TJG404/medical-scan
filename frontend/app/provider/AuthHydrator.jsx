@@ -9,21 +9,43 @@ export default function AuthHydrator() {
     const logout = useAuthStore((state) => state.logout);
 
     useEffect(() => {
+        let canceled = false;
+
         (async () => {
             try {
-                const res = await fetch("/api/auth/me", { credentials: "include" });
-                const { user } = await res.json();
+                let res = await fetch("/api/auth/me", { credentials: "include" });
+console.log(res.status);
+                if(res.status === 401) {    //access 토큰 만료 시
+                    const r = await fetch("/api/auth/refresh", {
+                        method: "POST",
+                        credentials: "include",
+                    });
+
+                    if (!r.ok) {
+                        if (!canceled) logout();
+                        return;
+                    }
+                    // refresh 성공 → me 다시
+                    res = await fetch("/api/auth/me", { credentials: "include" });
+                }
+
+                // 3) me 최종 처리 (401이 아니더라도 ok 체크)
+                if (!res.ok) {
+                    if (!canceled) logout();
+                    return;
+                }
+
+                const data = await res.json();
+                const user = data?.user;
 
                 if (user?.authenticated) {
-                    console.log("🔄 Hydrator: 새로고침 → Access Token 재발급됨");
-                    login({
-                        userId: user.userId,
-                        role: user.role,
-                        // accessToken: data.accessToken,
-                    });
+                    if (!canceled) {
+                        login({ userId: user.userId, role: user.role });
+                    }
                 } else {
-                    logout();
+                    if (!canceled) logout();
                 }
+
             } catch {
                 logout();
             }

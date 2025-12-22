@@ -6,7 +6,7 @@ export async function POST() {
     try {
         const cookieStore = await cookies();
         const refresh = cookieStore.get("refresh")?.value;
-
+console.log("refresh-------> ", refresh);
         if (!refresh) {
             return NextResponse.json({ message: "no refresh token" }, { status: 401 });
         }
@@ -25,11 +25,11 @@ export async function POST() {
             httpOnly: true,
             sameSite: "lax",
             secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 15,
             path: "/",
         });
 
         return res;
+
     } catch (err) {
         console.error("refresh error", err);
         return NextResponse.json({ message: "invalid refresh" }, { status: 401 });

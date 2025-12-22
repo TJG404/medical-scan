@@ -67,8 +67,9 @@
 }
 
 .patients-pagination .rc-pagination-item-active a {
-    color: #ffffff;
     font-weight: 700;
+    border-color: rgba(0, 190, 255, 0.9);
+    background: rgba(0, 190, 255, 0.18);
 }
 
 /* disabled(이전/다음 비활성) */

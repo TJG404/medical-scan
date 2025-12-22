@@ -5,7 +5,8 @@ import "@/styles/main.css";
 import "@/styles/userForm.css";
 import "@/styles/patient.css";
 import "@/styles/pagination.css";
-
+import "@/styles/viewerList.css";
+import "@/styles/imaging-record.css";
 
 import AppShell from "@/app/AppShell.js";
 

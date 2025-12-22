@@ -17,9 +17,10 @@ export async function GET() {
             { user: { id: payload.id, role: payload.role, authenticated:true } },
             { status: 200 }
         );
+
     } catch (err) {
         console.log("me error", err);
-        // access 토큰 만료 등
-        return NextResponse.json({ user: null }, { status: 200 });
+        // access 토큰 만료 - status 401
+        return NextResponse.json({ user: null }, { status: 401 });
     }
 }

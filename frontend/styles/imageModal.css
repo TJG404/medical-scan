@@ -1,0 +1,149 @@
+/* backdrop */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+/* modal */
+.modal {
+    width: min(1200px, 96vw);
+    height: min(760px, 92vh);
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* header */
+.modal-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* close button */
+.modal-close-btn {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* body */
+.modal-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 12px;
+    padding: 12px;
+    overflow: hidden;
+}
+
+/* viewer container */
+.viewer-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* toolbar */
+.viewer-toolbar {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* tool button */
+.tool-btn {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+/* viewer screen */
+.viewer-screen {
+    flex: 1;
+    background: #111;
+    color: #fff;
+}
+
+/* info area */
+.viewer-info {
+    overflow: auto;
+    padding-right: 4px;
+}
+
+/* info box */
+.info-box {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+/* label */
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* select */
+.form-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* textarea */
+.form-textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: vertical;
+}
+
+/* button row */
+.btn-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* primary button */
+.btn-primary {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #333;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* secondary button */
+.btn-secondary {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+}
+
+

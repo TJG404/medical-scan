@@ -11,7 +11,6 @@ export default function AppShell({ children }) {
     return (
         <>
             <AuthHydrator />
-
             {!authChecked ? (
                 <div className="app-loading">
                     {/* 로딩 UI 넣기 */}
