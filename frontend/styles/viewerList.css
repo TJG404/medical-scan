@@ -8,6 +8,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     background-color: #1a1a1a;
     padding: 15px;
@@ -79,7 +80,7 @@ body {
     background-color: #E0E0E0 !important;
     color: black !important;
     border: none !important;
-    padding: 6px 12px !important;
+    /*padding: 8px 8px !important;*/
     border-radius: 5px !important;
     cursor: pointer !important;
     font-size: 14px !important;
@@ -123,6 +124,10 @@ body {
     text-align: center;
     border-bottom: 1px solid #555;
 }
+.search-results th {
+    background-color: #333;
+    padding: 20px 0;
+}
 
 .btn-report {
     padding: 10px 15px;
@@ -163,3 +168,4 @@ body {
     background-color: #6c757d !important;
     cursor: not-allowed;
 }
+

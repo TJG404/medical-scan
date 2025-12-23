@@ -3,6 +3,7 @@ package com.medicalscan.backend.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,6 +24,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//            .authorizeHttpRequests(auth -> auth
+//                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                    .anyRequest().authenticated()
+//            );
 
         return http.build();
 
@@ -33,14 +38,14 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000","http://172.16.250.23:3000" ));
         configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
 
         configuration.setAllowedHeaders(List.of(
                 "Authorization","Content-Type","X-XSRF-TOKEN",
                 "X-Requested-With","Accept","Origin"
         ));
-        configuration.setAllowCredentials(true); // ✅ HttpOnly 쿠키 받으려면 필요
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

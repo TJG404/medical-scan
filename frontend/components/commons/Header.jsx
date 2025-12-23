@@ -8,6 +8,7 @@ import {postLogout} from "@/utils/usersAPI.js";
 export default function Header() {
     const router = useRouter();
     const isLogin = useAuthStore(s => s.isLogin);
+    const userId = useAuthStore(s => s.userId);
     const logout = useAuthStore(s => s.logout);
     const role = useAuthStore(s => s.role);
     const status = useAuthStore(s => s.status);
@@ -44,6 +45,7 @@ export default function Header() {
                     {role === 'admin' &&
                         <input type="button" value="회원정보" onClick={()=>{ router.push("/admin/members"); }}/>
                     }
+                    {userId && <div style={{color:"white"}}>{userId}</div>}
                     <input type="button" id="btn-logout" value="로그아웃" onClick={handleLogout}/>
                 </div>
             }

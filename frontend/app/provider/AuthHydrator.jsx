@@ -14,7 +14,6 @@ export default function AuthHydrator() {
         (async () => {
             try {
                 let res = await fetch("/api/auth/me", { credentials: "include" });
-console.log(res.status);
                 if(res.status === 401) {    //access 토큰 만료 시
                     const r = await fetch("/api/auth/refresh", {
                         method: "POST",
@@ -37,10 +36,9 @@ console.log(res.status);
 
                 const data = await res.json();
                 const user = data?.user;
-
                 if (user?.authenticated) {
                     if (!canceled) {
-                        login({ userId: user.userId, role: user.role });
+                        login({ userId: user.id, role: user.role });
                     }
                 } else {
                     if (!canceled) logout();

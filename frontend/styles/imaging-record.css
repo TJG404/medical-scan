@@ -159,12 +159,18 @@ body {
 
 /* 도구 버튼을 DICOM 뷰어 위쪽에 배치 */
 #toolBar {
-    /*width: 50%;*/
-    margin: 10px auto;
-    text-align: center;
+    position: absolute;
+    top:0;
+    /*border:1px solid red;*/
+    width: 350px;
+    /*margin-bottom: 200px;*/
+    /*margin: 10px auto;*/
+    /*text-align: center;*/
+    display: flex;
+    align-items: center;
 }
-.tool {
-    padding: 8px 16px;
+.viewer-tool {
+    padding: 8px 12px;
     margin: 4px;
     background: #555;
     border: none;
@@ -176,12 +182,12 @@ body {
 }
 
 /* DICOM 뷰포트 */
-#dicomViewerContainer {
-    width: 512px;
-    height: 512px;
-    background-color: black;
-    margin-top: 40px; /* 버튼과 간격 조정 */
-}
+/*#dicomViewerContainer {*/
+/*    width: 512px;*/
+/*    height: 512px;*/
+/*    background-color: black;*/
+/*    margin-top: 40px; !* 버튼과 간격 조정 *!*/
+/*}*/
 
 
 /* 중앙에서 DICOM을 랜더링하는 공간 */
@@ -191,8 +197,24 @@ body {
     background-color: black;
 }
 
+/* series-list */
+.series-card {
+  position: absolute;
+  height: 90vh;
+  left: 0px;
+  width: 300px;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  }
+
+
 /* 환자 정보 패널 */
 #info {
+    position: absolute;
+    height: 90vh;
+    right: 0px;
     width: 250px;
     background-color: #333;
     padding: 10px;
@@ -202,6 +224,7 @@ body {
 
 .info-container {
     border-left: 4px solid #48A6A7;
+    margin-bottom: 50px;
 }
 
 .info-container h3 {
@@ -212,7 +235,7 @@ body {
 }
 .info-container p {
     font-size: 14px;
-    margin: 5px 0;
+    margin: 10px 0;
     color: #ddd;
 }
 
@@ -228,7 +251,7 @@ body {
 
 #reportText {
     width: 100%;
-    height: 150px;
+    height: 180px;
     background-color: #444;
     color: white;
     border: 1px solid #666;
