@@ -22,6 +22,15 @@ export const getReport = async(pid) => {
     return response;
 }
 
+export const getSeriesList = async(pid, studyKey, seriesKey) => {
+    const response = await fetch("http://localhost:8080/patientScan/records/seriesList", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pid:pid, seriesKey: seriesKey, studyKey:studyKey }),
+    });
+    return response;
+}
+
 
 
 

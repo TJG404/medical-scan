@@ -1,6 +1,7 @@
 package com.medicalscan.backend.controller;
 
 import com.medicalscan.backend.dto.PageDto;
+import com.medicalscan.backend.dto.SeriesInfoDto;
 import com.medicalscan.backend.entity.Patient;
 import com.medicalscan.backend.entity.RadiologistReport;
 import com.medicalscan.backend.repository.PatientRepository;
@@ -29,6 +30,15 @@ public class PatientScanController {
     @GetMapping("/records/all")
     public ResponseEntity<?> getAllPatientRecords() {
         return ResponseEntity.ok(patientScanService.getAllPatientRecords());
+    }
+
+    // 모든 환자 영상 위치 정보 가져오기
+    @PostMapping("/records/seriesList")
+    public ResponseEntity<?> getSeriesListPatientRecords(@RequestBody SeriesInfoDto seriesInfoDto) {
+        System.out.println(seriesInfoDto.getPid());
+        System.out.println(seriesInfoDto.getSeriesKey());
+        System.out.println(seriesInfoDto.getStudyKey());
+        return ResponseEntity.ok(patientScanService.getSeriesListPatientRecords(seriesInfoDto));
     }
 
     // 판독 결과 보고서 가져오기

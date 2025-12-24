@@ -1,16 +1,36 @@
-
 // utils/dicomViewer.js
-import { init, RenderingEngine, Enums } from "@cornerstonejs/core";
+import { init, RenderingEngine, Enums, setUseCPURendering } from "@cornerstonejs/core";
 import { init as loaderInit } from "@cornerstonejs/dicom-image-loader";
 
 const renderingEngineId = "engine";
-const viewportId = "viewport";
+const viewportId = "dicomViewerContainer";
 
 let initialized = false;
-let renderingEngine = null;
+let engine = null;
+let ro = null; // ✅ ResizeObserver
 
+// let viewportId = null;
+
+let initPromise = null;
+let currentEl = null;
+
+
+// ✅ core/loader init은 딱 1번만 (StrictMode에도 안전)
 async function ensureInitOnce() {
+    // if (!initPromise) {
+    //     initPromise = (async () => {
+    //         // ✅ 핵심: init() 호출 전에 CPU 렌더링 강제
+    //         setUseCPURendering(true);
+    //
+    //         await init();
+    //         await loaderInit();
+    //     })();
+    // }
+    // await initPromise;
     if (initialized) return;
+
+    // setUseCPURendering(true);
+
     await init();
     await loaderInit();
     initialized = true;
@@ -18,206 +38,310 @@ async function ensureInitOnce() {
 
 // ✅ RenderingEngine은 단 1번만 생성
 function getOrCreateEngine() {
-    if (!renderingEngine) {
-        renderingEngine = new RenderingEngine(renderingEngineId);
+    if (!engine) {
+        engine = new RenderingEngine(renderingEngineId);
     }
-    return renderingEngine;
+    return engine;
 }
 
-export async function initViewer(element) {
-    if (!element) throw new Error("initViewer: element is required");
+/**
+ * 뷰어 초기화 (모달 open 시 element가 생겼을 때 호출)
+ * - element가 바뀔 수 있으므로 enableElement는 매번 호출 가능하게 유지
+ */
+export async function initViewer(el) {
+    if (!el) throw new Error("initViewer: element is required");
+
+    // const engine = new RenderingEngine(
+    //     `engine-${Date.now()}` // ❗ 매번 새 ID
+    // );
+    //
+    // engine.enableElement({
+    //     viewportId: "viewport",
+    //     type: Enums.ViewportType.STACK,
+    //     element: el,
+    // });
+    //
+    // return { renderingEngine: engine, viewportId: "viewport" };
+
+
 
     await ensureInitOnce();
+    const eng = getOrCreateEngine();
 
-    const engine = getOrCreateEngine();
+    // ✅ 매번 새로운 viewportId
+    // viewportId = `viewport_${Date.now()}`;
+    currentEl = el;
 
-    // 이미 viewport가 있으면 제거 후 재연결
-    try {
-        engine.disableElement(viewportId);
-    } catch {}
+    // eng.enableElement({
+    //     viewportId,
+    //     element: el,
+    //     type: Enums.ViewportType.STACK,
+    // });
+    //
+    // eng.resize(true, true);
 
-    engine.enableElement({
+    const viewportInput = {
+        viewportId,
+        element: el,
+        type: Enums.ViewportType.STACK,
+    };
+
+    eng.enableElement(viewportInput);
+    const viewport = eng.getViewport(viewportId);
+
+    return { eng, viewportId, viewport };
+ }
+
+function getEngine() {
+    if (!engine) engine = new RenderingEngine(renderingEngineId);
+    return engine;
+}
+
+// ✅ el이 바뀌면 무조건 재연결
+export async function bindViewer(el) {
+    if (!el) throw new Error("bindViewer: el is required");
+    await ensureInitOnce();
+
+    const eng = getEngine();
+
+    // 이미 같은 el에 붙어 있으면 재사용
+    if (currentEl === el) {
+        const vp = eng.getViewport(viewportId);
+        if (vp) return { renderingEngine: eng, viewportId };
+    }
+
+    // el이 달라졌거나 viewport가 없으면 재-enable
+    try { eng.disableElement(viewportId); } catch {}
+
+    eng.enableElement({
         viewportId,
         type: Enums.ViewportType.STACK,
-        element,
+        element: el,
     });
 
-    const viewport = engine.getViewport(viewportId);
-    if (!viewport) throw new Error("viewport 생성 실패");
+    currentEl = el;
 
-    return { viewport };
+    // 레이아웃 반영
+    eng.resize(true, true);
+
+    return { renderingEngine: eng, viewportId };
 }
 
-export async function showDicom(viewport, imageIds) {
-    if (!viewport) throw new Error("showDicom: viewport is required");
-    await viewport.setStack(imageIds, 0);
+
+
+
+/**
+ * 스택 표시
+ * ✅ 중요: viewport를 인자로 받지 말고, 항상 최신 viewport를 다시 꺼내서 사용
+ * -> destroyed viewport 에러 방지
+ */
+
+export async function showDicom(imageIds, index = 0) {
+    // const eng = getOrCreateEngine();
+    // const viewport = eng.getViewport(viewportId);
+    // if (!viewport) throw new Error("viewport not found");
+
+    await new Promise((r) => requestAnimationFrame(r));
+    eng.resize(true, true);
+
+    const img = viewport.getImageData();
+    // console.log("cols:", img.dimensions[0], "rows:", img.dimensions[1]);
+
+    const c = document.createElement("canvas");
+    const gl = c.getContext("webgl2") || c.getContext("webgl");
+    console.log("MAX_TEXTURE_SIZE =", gl?.getParameter(gl.MAX_TEXTURE_SIZE));
+
+
+    // stack
+    await viewport.setStack(imageIds, index);
+    await viewport.render();
+
+    // ✅ 첫 이미지 렌더 1회 대기
+    // const el = viewport.element;
+    // await new Promise((resolve) => {
+    //     const handler = () => resolve();
+    //     el.addEventListener(Enums.Events.IMAGE_RENDERED, handler, { once: true });
+    // });
+
+    // ✅ “전체가 보이도록” 기본 카메라로 강제
+    // eng.resize(true, true);
+
+    // 4) ✅ 여기서부터 "전체 fit" 강제
+    // const el = viewport.element;
+    // const w = el.clientWidth;
+    // const h = el.clientHeight;
+    // const aspect = w / h;
+    //
+    // const imageData = viewport.getImageData?.();
+    // // imageData 없으면(아직 로드전) 그냥 render만
+    // if (!imageData) {
+    //     viewport.render();
+    //     return;
+    // }
+    //
+    // const [cols, rows] = imageData.dimensions;     // 보통 [width, height]
+    // // const [rows, cols] = imageData.dimensions;
+    // const [sx, sy] = imageData.spacing || [1, 1];  // 픽셀 스페이싱
+    //
+    // const imgW = cols * sx;
+    // const imgH = rows * sy;
+    //
+    // // vtk/Cornerstone parallelScale = 화면 "반 높이" (world unit)
+    // // 전체가 보이려면: halfHeight >= imgH/2 AND halfHeight >= (imgW/2)/aspect
+    // const fitParallelScale = Math.max(imgH / 2, (imgW / 2) / aspect);
+    // // const fitParallelScale = Math.max(700, 700);
+    //
+    // const cam = viewport.getCamera?.() || {};
+    // viewport.setCamera?.({
+    //     ...cam,
+    //     parallelScale: fitParallelScale,
+    // });
+    //
+    // // eng.resize(true, true);          // ✅ setStack 이후도 한 번 더
+    // // viewport.resetCamera();          // ✅ 전체 보이게
+    // // viewport.resetProperties?.();    // ✅ 남은 상태 제거
+    // // viewport.render();
+
     viewport.render();
+
+    // const def = viewport.getDefaultCamera?.();
+    //
+    // console.log("camera:", viewport.getCamera?.());
+    // console.log("default:", def);
+    // if (def) {
+    //     viewport.setCamera(def);
+    // } else {
+    //     viewport.resetCamera(); // fallback
+    // }
+    //
+    // viewport.render();
+
+
+    //
+    // // 레이아웃 확정
+    // await new Promise((r) => requestAnimationFrame(r));
+    // eng.resize(true, true);
+    //
+    // // setStack
+    // await viewport.setStack(imageIds, index);
+    //
+    // // ✅ "첫 렌더 후" fit을 위해 IMAGE_RENDERED 1회 기다리기
+    // const el = viewport.element;
+    // const waitFirstRender = () =>
+    //     new Promise((resolve) => {
+    //         const handler = () => {
+    //             el.removeEventListener(Enums.Events.IMAGE_RENDERED, handler);
+    //             resolve();
+    //         };
+    //         el.addEventListener(Enums.Events.IMAGE_RENDERED, handler, { once: true });
+    //     });
+    //
+    // viewport.render();
+    // await waitFirstRender();
+    //
+    // // ✅ 여기서 fit(전체 보이게)
+    // eng.resize(true, true);
+    // viewport.resetCamera();
+    // viewport.render()
+
+    // // 1) 레이아웃 확정 + 엔진 리사이즈
+    // await new Promise((r) => requestAnimationFrame(r));
+    // eng.resize(true, true);
+    //
+    // // 2) 스택 세팅
+    // await viewport.setStack(imageIds, index);
+    //
+    // console.log("stack size:", viewport.getImageIds()?.length);
+    //
+    // // 3) 일단 1번 렌더
+    // viewport.render();
+    //
+    // // 4) ✅ "첫 렌더 이후"에 fit 다시 (여기가 핵심)
+    // await new Promise((r) => requestAnimationFrame(r));
+    // eng.resize(true, true);
+    // viewport.resetCamera();
+    // viewport.render();
+    //
+    // // 1️⃣ 모달 레이아웃 안정화
+    // await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    //
+    // eng.resize(true, true);
+    //
+    // // 2️⃣ 스택 설정
+    // await viewport.setStack(imageIds, index);
+    // // await viewport.setStack(imageIds, 0);
+    //
+    // console.log("stack size:", viewport.getImageIds()?.length);
+    // console.log("current image:", viewport.getCurrentImageId?.());
+    //
+    //
+    // // 3️⃣ 🔥🔥🔥 핵심: fitToWindow (resetCamera ❌)
+    // if (viewport.fitToWindow) {
+    //     viewport.fitToWindow();
+    // } else {
+    //     // fallback (버전 차이 대응)
+    //     const cam = viewport.getCamera();
+    //     const imageData = viewport.getImageData();
+    //     const { rows, columns } = imageData.dimensions;
+    //
+    //     const el = viewport.element;
+    //     const scaleX = columns / el.clientWidth;
+    //     const scaleY = rows / el.clientHeight;
+    //
+    //     viewport.setCamera({
+    //         ...cam,
+    //         parallelScale: Math.max(scaleX, scaleY),
+    //     });
+    // }
+    //
+    // // 4️⃣ render
+    // eng.resize(true, true);
+    // viewport.render();
 }
 
-// ❌ destroyEngine 제거
-// RenderingEngine은 앱 종료 시까지 유지
+
+export function clearStack() {
+    try { ro?.disconnect?.(); } catch {}
+    ro = null;
+}
 
 
-
-// // utils/dicomViewer.js
-// import { init, RenderingEngine, Enums } from "@cornerstonejs/core";
-// import { init as loaderInit } from "@cornerstonejs/dicom-image-loader";
-//
-// let renderingEngine;
-// const renderingEngineId = "engine";
-// const viewportId = "viewport";
-// let initialized = false;
-//
-// // export async function initViewer(element) {
-// //     if (initialized) return;
-// //
-// //     await init();
-// //     await loaderInit();
-// //
-// //     initialized = true;
-// //     renderingEngine = new RenderingEngine(renderingEngineId);
-// //
-// //     renderingEngine.enableElement({
-// //         viewportId,
-// //         type: Enums.ViewportType.STACK,
-// //         element,
-// //     });
-// //
-// //     return viewportId;
-// // }
-//
-// export async function initViewer(element) {
-//     if (!element) throw new Error("initViewer: element is required");
-//
-//     // ✅ core/loader는 1회만
-//     if (!initialized) {
-//         await init();
-//         await loaderInit();
-//         initialized = true;
-//     }
-//
-//     // ✅ 엔진은 모달마다 새로 만들거나(권장) 재사용 전략을 쓰면 되는데,
-//     // 지금은 "모달 열 때 생성, 닫을 때 destroy" 패턴이므로 새로 생성이 안전합니다.
-//     renderingEngine = new RenderingEngine(renderingEngineId);
-//
-//     renderingEngine.enableElement({
-//         viewportId,
-//         type: Enums.ViewportType.STACK,
-//         element,
-//     });
-//
-//     const viewport = renderingEngine.getViewport(viewportId);
-//     if (!viewport) throw new Error("initViewer: viewport 생성 실패");
-//
-//     // ✅ 모달에서 destructuring 가능하게 객체로 리턴
-//     return { renderingEngine, viewportId, viewport };
-// }
-//
-// // export async function showDicom(imageIds) {
-// //     const viewport = renderingEngine.getViewport(viewportId);
-// //     await viewport.setStack(imageIds);
-// //     viewport.render();
-// // }
-// export async function showDicom(viewport, imageIds) {
-//     if (!viewport) throw new Error("showDicom: viewport is required");
+// export async function showDicom(imageIds) {
 //     if (!imageIds?.length) throw new Error("showDicom: imageIds is empty");
 //
+//     const engine = getOrCreateEngine();
+//     const viewport = engine.getViewport(viewportId);
+//     if (!viewport) throw new Error("showDicom: viewport not found (did you call initViewer?)");
+//
 //     await viewport.setStack(imageIds, 0);
+//
+//     // requestAnimationFrame(() => {
+//     //     try {
+//     //         engine.resize(true, true);   // 또는 viewport.resize()가 있으면 그걸 써도 됨
+//     //         viewport.render();
+//     //     } catch {}
+//     // });
+//
 //     viewport.render();
 // }
-//
-// // ✅ destroy도 renderingEngine 인스턴스를 직접 받는다
-// export function destroyViewer(renderingEngine, viewportId = "viewport") {
+
+/**
+ * 모달 닫힐 때: destroy 하지 말고 연결만 끊기(간단/안전)
+ * - destroyEngine을 안 하므로 재오픈이 빨라지고, destroyed 이슈도 줄어듦
+ */
+// export function detachViewer() {
+//     if (!renderingEngine) return;
 //     try {
-//         renderingEngine?.disableElement?.(viewportId);
-//         renderingEngine?.destroy?.();
-//     } catch (e) {
+//         renderingEngine.disableElement(viewportId);
+//     } catch {
 //         // ignore
 //     }
 // }
-//
-//
-//
-// // // utils/dicomViewer.js
-// // import { init as coreInit, RenderingEngine, Enums } from "@cornerstonejs/core";
-// // import { init as dicomImageLoaderInit } from "@cornerstonejs/dicom-image-loader";
-// //
-// // // ✅ tools init + addTool 필요
-// // import {
-// //     init as toolsInit,
-// //     addTool,
-// //     ToolGroupManager,
-// //     ZoomTool,
-// //     PanTool,
-// //     StackScrollTool,
-// //     LengthTool,
-// //     AngleTool,
-// //     BidirectionalTool,
-// // } from "@cornerstonejs/tools";
-// //
-// // let renderingEngineId = "ctRenderingEngine";
-// // let renderingEngine;
-// // let toolGroupId = "ctToolGroup";
-// // let viewportId = "ctViewport";
-// //
-// // export async function initViewer({ element }) {
-// //     if (!element) throw new Error("element is required");
-// //
-// //     // 1) core / loader init
-// //     await coreInit();
-// //     await dicomImageLoaderInit();
-// //
-// //     // 2) ✅ tools init
-// //     await toolsInit();
-// //
-// //     // 3) ✅ tool 등록 (등록 안 하면 addTool이 꼬이거나 toolGroup 동작이 이상해짐)
-// //     addTool(ZoomTool);
-// //     addTool(PanTool);
-// //     addTool(StackScrollTool);
-// //     addTool(LengthTool);
-// //     addTool(AngleTool);
-// //     addTool(BidirectionalTool);
-// //
-// //     // 4) RenderingEngine
-// //     renderingEngine = new RenderingEngine(renderingEngineId);
-// //
-// //     renderingEngine.enableElement({
-// //         viewportId,
-// //         type: Enums.ViewportType.STACK,
-// //         element,
-// //     });
-// //
-// //     // 5) ✅ ToolGroup 생성 (이미 있으면 가져오기)
-// //     const existing = ToolGroupManager.getToolGroup(toolGroupId);
-// //     const toolGroup = existing ?? ToolGroupManager.createToolGroup(toolGroupId);
-// //
-// //     if (!toolGroup) {
-// //         // createToolGroup가 undefined면 보통 "이미 존재" or "초기화 문제"
-// //         throw new Error("ToolGroup 생성 실패: 기존 그룹/초기화 상태를 확인하세요.");
-// //     }
-// //
-// //     toolGroup.addTool(PanTool.toolName);
-// //     toolGroup.addTool(ZoomTool.toolName);
-// //     toolGroup.addTool(StackScrollTool.toolName);
-// //     toolGroup.addTool(LengthTool.toolName);
-// //     toolGroup.addTool(AngleTool.toolName);
-// //     toolGroup.addTool(BidirectionalTool.toolName);
-// //
-// //     toolGroup.setToolActive(StackScrollTool.toolName, { bindings: [] });
-// //     toolGroup.addViewport(viewportId, renderingEngineId);
-// //
-// //     return { toolGroup, renderingEngine, viewportId };
-// // }
-// //
-// // export function destroyViewer() {
-// //     try {
-// //         // ✅ ToolGroupManager에서 제거 (중요!)
-// //         ToolGroupManager.destroyToolGroup(toolGroupId);
-// //     } catch (e) {}
-// //
-// //     try {
-// //         renderingEngine?.destroy?.();
-// //     } catch (e) {}
-// //
-// //     renderingEngine = null;
-// // }
+
+/**
+ * (선택) 화면만 비우기
+ */
+// export function clearStack() {
+//     try { ro?.disconnect?.(); } catch {}
+//     ro = null;
+// }

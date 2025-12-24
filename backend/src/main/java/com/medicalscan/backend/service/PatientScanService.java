@@ -1,6 +1,8 @@
 package com.medicalscan.backend.service;
 
 
+import com.medicalscan.backend.dto.SeriesInfoDto;
+import com.medicalscan.backend.dto.SeriesInfoList;
 import com.medicalscan.backend.entity.Patient;
 import com.medicalscan.backend.entity.Series;
 import com.medicalscan.backend.entity.Study;
@@ -106,6 +108,13 @@ public class PatientScanService {
 
         return resultList;
     }
+
+    // 모든 환자 영상 위치 정보 가져오기
+    public List<SeriesInfoList> getSeriesListPatientRecords(SeriesInfoDto dto) {
+        List<SeriesInfoList> list = seriesRepository.findSeriesInfoList(dto.getPid(), dto.getSeriesKey(), dto.getStudyKey());
+        return list;
+    }
+
 //
 //    public List<Patient> searchPatients(String pid, String pname, String psex, String pbirthdate) {
 //        if (pid != null && !pid.isEmpty()) {

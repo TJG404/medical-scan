@@ -191,11 +191,11 @@ body {
 
 
 /* 중앙에서 DICOM을 랜더링하는 공간 */
-#dicomViewerContainer {
-    width: 700px;
-    height: 700px;
-    background-color: black;
-}
+/*#dicomViewerContainer {*/
+/*    width: 700px;*/
+/*    height: 700px;*/
+/*    background-color: black;*/
+/*}*/
 
 /* series-list */
 .series-card {

@@ -47,7 +47,6 @@ export default function ListAll() {
                         seriesdate: series.seriesdate || "N/A",
                         seriesnum: series.seriesnum || "N/A",
                         seriescnt: study.seriescnt || 0,
-                        seriesList: studyDetails[0].series
                     });
 
                 });
@@ -75,7 +74,7 @@ export default function ListAll() {
         return list.slice(start, end);
     }, [list, currentPage, pageSize]);
 
-
+    /** 의료 목록 가져오기 **/
     useEffect(() => {
         const fetchData = async () => {
             const response = await getList();
@@ -87,10 +86,9 @@ export default function ListAll() {
         fetchData();
     }, []);
 
+    /** viewer 모달창 토글 **/
     useEffect(() => {
-        if (selected) {
-            setOpen(true);
-        }
+        if (selected) { setOpen(true);  }
     }, [selected]);
 
     /** viewer 버튼 클릭 이벤트 **/
@@ -219,8 +217,6 @@ export default function ListAll() {
                     userId={userId}
                 />
             )}
-
-
         </>
     )
 
