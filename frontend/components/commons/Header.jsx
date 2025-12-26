@@ -45,7 +45,7 @@ export default function Header() {
                     {role === 'admin' &&
                         <input type="button" value="회원정보" onClick={()=>{ router.push("/admin/members"); }}/>
                     }
-                    {userId && <div style={{color:"white"}}>{userId}</div>}
+                    {userId && <div style={{color:"white", fontSize:"14px"}}>{userId}</div>}
                     <input type="button" id="btn-logout" value="로그아웃" onClick={handleLogout}/>
                 </div>
             }

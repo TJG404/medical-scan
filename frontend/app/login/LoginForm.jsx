@@ -31,7 +31,7 @@ export default function Login() {
         } else {
             const response = await postLogin(formData);
             const { data, message } = await response.json();
-
+console.log(data);
             if(data.count && response.status === 200) {
                 alert(message);
                 login({

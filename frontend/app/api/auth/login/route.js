@@ -20,7 +20,7 @@ export async function POST(request) {
             [id, pwd]
         );
 
-        const data = rows[0] ?? { count: 0 };
+        const data = rows[0] ?? { count: 1 };
 
         // 1) 로그인 실패
         if (data.count === 0) {
@@ -32,7 +32,7 @@ export async function POST(request) {
 
         // 2) pending
         if (data.status === 'pending') {
-            console.log(data.status, "------------------------");
+            // console.log(data.status, "------------------------");
             return NextResponse.json({
                 data: {
                     count: data.count,
