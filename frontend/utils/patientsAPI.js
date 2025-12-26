@@ -7,7 +7,7 @@
 
 export const getPatients = async(pages) => {
     // console.log(pages, "-----pages");
-   const response = await fetch("http://localhost:8080/patients/all", {
+   const response = await fetch("http://172.16.250.23:8080/patients/all", {
                method: "POST",
                headers: { "Content-Type": "application/json" },
                body: JSON.stringify(pages),

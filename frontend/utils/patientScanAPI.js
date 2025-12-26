@@ -6,7 +6,7 @@
 // }
 
 export const getList = async() => {
-   const response = await fetch("http://localhost:8080/patientScan/records/all", {
+   const response = await fetch("http://172.16.250.23:8080/patientScan/records/all", {
                method: "GET",
                headers: { "Content-Type": "application/json" },
            });
@@ -23,7 +23,7 @@ export const getReport = async(pid) => {
 }
 
 export const getSeriesList = async(pid, studyKey, seriesKey) => {
-    const response = await fetch("http://localhost:8080/patientScan/records/seriesList", {
+    const response = await fetch("http://172.16.250.23:8080/patientScan/records/seriesList", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pid:pid, seriesKey: seriesKey, studyKey:studyKey }),
