@@ -10,12 +10,6 @@ export async function POST(request) {
         const body = await request.json();
         const { id, pwd } = body;
 
-        console.log("DB_HOST", process.env.DB_HOST);
-        console.log("DB_PORT", process.env.DB_PORT);
-        console.log("DB_USER", JSON.stringify(process.env.DB_USER));
-        console.log("DB_NAME", process.env.DB_NAME);
-
-
         const db = getDB();
         const [rows] = await db.execute(
             ` select count(*) as count, id, role, status 
