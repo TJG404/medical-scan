@@ -19,18 +19,4 @@ public class RadiologistReportService {
         return radiologistReportRepository.findLatestReportByPatientId(patientId);
     }
 
-//    // 판독 데이터 저장 (등록/수정)
-//    public RadiologistReport saveReport(RadiologistReport report) {
-//        report.setModDate(LocalDateTime.parse(LocalDateTime.now().toString()));
-//        if (report.getReportCode() == null) {
-//            report.setRegDate(LocalDateTime.parse(LocalDateTime.now().toString()));
-//        }
-//        return radiologistReportRepository.save(report);
-//    }
-//
-//
-//    // 환자 ID로 판독 기록 조회
-//    public List<RadiologistReport> getReportsByPatientId(String patientId) {
-//        return radiologistReportRepository.findByPatientId(patientId);
-//    }
 }

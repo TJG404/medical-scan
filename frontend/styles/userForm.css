@@ -189,8 +189,8 @@ button:hover {
     margin-left: 83%;
 }
 
-.modal {
-    display: none;
+.signup-modal {
+    /*display: none;*/
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -202,7 +202,7 @@ button:hover {
     align-items: center;
 }
 
-.modal-content {
+.signup-modal-content {
     background-color: #333;
     width: 350px;
     padding: 20px;
@@ -212,7 +212,7 @@ button:hover {
     position: relative;
 }
 
-.modal-content p {
+.signup-modal-content p {
     font-size: 14px;
     color: white;
     margin-bottom: 15px;
@@ -288,11 +288,15 @@ button:hover {
     padding-top: 100px;
 }
 
+.privacy-content pre {
+    color: #111 !important;
+}
+
 .privacy-modal-content {
     position: relative;
     background-color: #fff;
     margin: auto;
-    padding: 20px;
+    padding: 10px;
     border-radius: 8px;
     width: 80%;
     max-width: 700px;
@@ -335,3 +339,73 @@ button:hover {
 #privacy-link:hover {
     text-decoration: underline;
 }
+
+
+
+/* 배경 */
+.privacy-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 모달 본체 */
+.privacy-modal {
+    width: min(700px, 90%);
+    max-height: 85vh;
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px;
+    overflow: hidden;
+    position: relative;
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+/* 내용 스크롤 */
+.privacy-content {
+    margin-top: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+/* 링크 스타일 */
+.privacy-link {
+    background: none;
+    border: none;
+    color: #0070f3;
+    cursor: pointer;
+    margin-left: 6px;
+    text-decoration: underline;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+

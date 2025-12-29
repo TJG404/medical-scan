@@ -12,7 +12,7 @@ export default function ListAll() {
     const [list, setList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(0);
-    const [pageSize, setPageSize] = useState(20);
+    const [pageSize, setPageSize] = useState(12);
     const [expandedRow, setExpandedRow] = useState({index:null, pid:null});
     const [report, setReport] = useState({});
     const [open, setOpen] = useState(false);

@@ -19,8 +19,6 @@ public class PatientService {
 
     public Page<Patient> findAll(Pageable pageable) {
         Page<Patient> page = patientRepository.findAll(pageable);
-//        System.out.println(page + "-------------> page");
-//        List<Patient> patients = page.getContent();
         return page;
     }
 
