@@ -883,6 +883,29 @@ CREATE USER 'medicaluser'@'172.16.250.23' IDENTIFIED BY 'mysql1234';
 GRANT ALL PRIVILEGES ON medicalscan.* TO 'medicaluser'@'172.16.250.23';
 FLUSH PRIVILEGES;  
 
+use medicalscan;
+select database();
+show tables;
+select * from users;
+select * from users where id like 'kelly%';
+-- mysql은 수정, 삭제 시 update mode를 변경
+set sql_safe_updates = 0;
+delete from users where id like 'kelly%';
+
+CREATE USER 'medicaluser'@'172.16.250.%' IDENTIFIED BY 'mysql1234';
+GRANT ALL PRIVILEGES ON medicalscan.* TO 'medicaluser'@'172.16.250.%';
+
+SELECT Host, User
+FROM mysql.user
+WHERE User = 'medicaluser';  -- 172.16.250.23
+
+DROP USER 'medicaluser'@'%';
+FLUSH PRIVILEGES;
+
+DELETE FROM mysql.user WHERE User='medicaluser';
+FLUSH PRIVILEGES;
+
+
 
     
 
